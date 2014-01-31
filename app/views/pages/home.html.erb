@@ -1,0 +1,40 @@
+<% if !signed_in? %>
+    <div class="center hero-unit">
+      <h1>Rails beginner</h1>
+      <h2>
+        This is the Home page for the
+        <a href='https://gist.github.com/xdite/8135629'>Rails beginner</a> project (Rails 新手村的作業).
+      </h2>
+
+      <%= link_to "Sign up now!", register_path, class: "btn btn-large btn-primary" %>
+    </div>
+
+    <%= link_to image_tag("rails.png", alt: "Rails"), 'http://rubyonrails.org/' %>
+<% else %>
+    <h5><%= render 'shared/content_title', title: "Your Activity" %></h5>
+
+    <ul class='nav nav-tabs'>
+      <li class='<%= 'active' if params[:tab].nil? %>'>
+        <%= link_to "Posts (#{@current_user.posts.size})", root_path %>
+      </li>
+      <li class='<%= 'active' if params[:tab] == 'comments' %>'>
+        <%= link_to "Comments (#{@current_user.comments.size})", root_path(tab: 'comments') %>
+      </li>
+    </ul>
+
+    <% if params[:tab].nil? %>
+        <% if @posts.present? %>
+            <% @posts.each do |post| %>
+                <%= render 'posts/post', post: post %>
+            <% end %>
+            <%= will_paginate @posts%>
+        <% else %>
+            <%= 'None' %>
+        <% end %>
+    <% elsif params[:tab] == 'comments' %>
+        <% @comments.each do |comment| %>
+            <%= render 'comments/comment', comment: comment, show_post: true %>
+        <% end %>
+        <%= will_paginate @comments%>
+    <% end %>
+<% end %>

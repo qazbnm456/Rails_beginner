@@ -1,0 +1,9 @@
+<%= render 'shared/content_title', title: 'All Posts' %>
+
+<%= will_paginate %>
+
+<% @posts.each do |post| %>
+    <%= render 'post', post: post %>
+<% end %>
+
+<%= will_paginate %>
